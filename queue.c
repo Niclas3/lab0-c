@@ -23,7 +23,25 @@ struct list_head *q_new()
 }
 
 /* Free all storage used by queue */
-void q_free(struct list_head *head) {}
+void q_free(struct list_head *head)
+{
+    if (head) {
+        struct list_head *next = head->next;
+        while (!list_empty(head)) {
+            // cppcheck-suppress nullPointer
+            element_t *ele = list_entry(next, element_t, list);
+            list_del(next);
+            next = next->next;
+            if (ele) {
+                if (ele->value)
+                    free(ele->value);
+                free(ele);
+            }
+        }
+
+        free(head);
+    }
+}
 
 /* Insert an element at head of queue */
 bool q_insert_head(struct list_head *head, char *s)
