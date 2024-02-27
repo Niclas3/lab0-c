@@ -25,6 +25,17 @@ void q_free(struct list_head *head) {}
 /* Insert an element at head of queue */
 bool q_insert_head(struct list_head *head, char *s)
 {
+    int len = strlen(s);
+    element_t *ele = malloc(sizeof(element_t));
+    char *str = malloc(len);
+    if (!head || !ele || !str) {
+        return false;
+    }
+
+    strncpy(str, s, len);
+    ele->value = str;
+    list_add(&ele->list, head);
+
     return true;
 }
 
