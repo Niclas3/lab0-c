@@ -60,9 +60,22 @@ bool q_insert_tail(struct list_head *head, char *s)
 }
 
 /* Remove an element from head of queue */
+
 element_t *q_remove_head(struct list_head *head, char *sp, size_t bufsize)
 {
-    return NULL;
+    if (head == NULL || list_empty(head)) {
+        return NULL;
+    }
+
+    // cppcheck-suppress nullPointer
+    element_t *ele = list_first_entry(head, element_t, list);
+    int len = strlen(ele->value);
+    if (sp && len < bufsize - 1) {
+        strncpy(sp, ele->value, len);
+    }
+    list_del(head->next);
+
+    return ele;
 }
 
 /* Remove an element from tail of queue */
